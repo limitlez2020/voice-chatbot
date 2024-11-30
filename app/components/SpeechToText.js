@@ -38,7 +38,7 @@ export default function SpeechToText() {
   
   return (
     <div>
-      <p>Microphone: {listening ? 'on' : 'off'}</p> {/* Display the microphone status */}
+      <p>Microphone: {listening ? "on" : "off"}</p> {/* Display the microphone status */}
       <button onClick={startRecording}>Start</button> {/* Button to start listening */}
       <button onClick={stopRecording}>Stop</button> {/* Button to stop listening */}
       <p>{transcript}</p> {/* Display the transcript */}
