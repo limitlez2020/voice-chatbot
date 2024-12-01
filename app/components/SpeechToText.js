@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import 'regenerator-runtime/runtime';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { MicrophoneIcon } from '@heroicons/react/24/outline';
@@ -10,6 +10,8 @@ import { MicrophoneIcon } from '@heroicons/react/24/outline';
 export default function SpeechToText() {
   /* State to know whether the browser supports speech recognition */
   const [supportsSpeechRecognition, setSupportsSpeechRecognition] = useState(true);
+  /* Ref for transcript */
+  const transcriptRef = useRef(null);
 
   
   /* Get the necessary properties from the useSpeechRecognition hook */
@@ -37,6 +39,14 @@ export default function SpeechToText() {
   };
 
 
+  /* Automatic scrolling to the bottom of the transcript: */
+  useEffect(() => {
+    if (transcriptRef.current) {
+      transcriptRef.current.scrollTop = transcriptRef.current.scrollHeight;
+    }
+  }, [transcript]);
+
+
   
   return (
     
@@ -47,18 +57,19 @@ export default function SpeechToText() {
           <div className='absolute w-full h-full opacity-5 bg-noise-pattern'></div>
 
           {/* Header: */}
-          <div className='font-semibold text-xl pt-7 pb-7'>
+          <div className='font-semibold text-xl pt-7 mb-28'>
             Voice Chatbot
           </div>
 
           {/* AI Voice Character: */}
-          <div className='border-black border-2 size-56 rounded-full mt-10'>
+          <div className='border-black border-2 size-56 rounded-full mb-28'>
             {/* Insert an animation here: */}
           </div>
 
           {/* Transcript: */}
-          {/* Only display the first two lines of the transcript and make the overflow hidden */}
-          <div className='w-1/2 h-14 text-lg text-gray-700 z-10 mt-28 overflow-y-auto'>
+          <div className='w-1/2 h-14 text-lg text-gray-700 z-10 overflow-y-auto scrollbar-none'
+                ref={transcriptRef}
+          >
             {transcript}
           </div>
 
