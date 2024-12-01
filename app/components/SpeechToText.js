@@ -4,10 +4,12 @@ import React from 'react';
 import { useState } from 'react';
 import 'regenerator-runtime/runtime';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { MicrophoneIcon } from '@heroicons/react/24/outline';
 
 
 export default function SpeechToText() {
-  /* States */
+  /* State to know whether the browser supports speech recognition */
+  const [supportsSpeechRecognition, setSupportsSpeechRecognition] = useState(true);
 
   
   /* Get the necessary properties from the useSpeechRecognition hook */
@@ -19,7 +21,7 @@ export default function SpeechToText() {
 
   /* Check if the browser supports speech recognition */
   if (!SpeechRecognition.browserSupportsSpeechRecognition) {
-    return <span>Browser does not support speech recognition.</span>;
+    setSupportsSpeechRecognition(false);
   }
 
 
@@ -37,11 +39,52 @@ export default function SpeechToText() {
 
   
   return (
+    
     <div>
-      <p>Microphone: {listening ? "on" : "off"}</p> {/* Display the microphone status */}
-      <button onClick={startRecording}>Start</button> {/* Button to start listening */}
-      <button onClick={stopRecording}>Stop</button> {/* Button to stop listening */}
-      <p>{transcript}</p> {/* Display the transcript */}
+      {supportsSpeechRecognition ? (
+        <div className='w-full min-h-screen max-h-screen bg-[#fcf5eb] flex flex-col items-center'>
+          {/* Background Noise Texture: */}
+          <div className='absolute w-full h-full opacity-5 bg-noise-pattern'></div>
+
+          {/* Header: */}
+          <div className='font-semibold text-xl pt-7 pb-7'>
+            Voice Chatbot
+          </div>
+
+          {/* AI Voice Character: */}
+          <div className='border-black border-2 size-56 rounded-full mt-10'>
+            {/* Insert an animation here: */}
+          </div>
+
+          {/* Transcript: */}
+          {/* Only display the first two lines of the transcript and make the overflow hidden */}
+          <div className='w-1/2 h-14 text-lg text-gray-700 z-10 mt-28 overflow-y-auto'>
+            {transcript}
+          </div>
+
+          {/* Recording Buttons: */}
+          <button className={`${listening? 'bg-red-500' : 'bg-white'} p-4 border-black border-2 rounded-full z-10 mt-5`}
+                  onClick={listening ? stopRecording : startRecording}>
+            {listening ? (
+              /* Stop recording: */
+              <div className="w-5 h-5 flex items-center justify-center">
+                <div className="w-4/5 h-4/5 bg-white border-black border-2 rounded-md animate-pulse"></div>
+              </div>
+            ) : (
+              /* Start recording: */
+              <MicrophoneIcon className='w-5 h-5'/>
+            )}
+          </button>
+        </div>
+
+      ) : (
+        /* Display error message if the browser does not support speech recognition */
+        <div className='w-full min-h-screen bg-[#fcf5eb] flex flex-col items-center justify-center'>
+          <p className='font-semibold text-4xl pb-2'>🥺</p>
+          <p className='font-semibold text-4xl pb-2'>SORRY</p>
+          <p>This browser does not support speech recognition</p>
+        </div>
+      )}
     </div>
   );
 }
