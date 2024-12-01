@@ -19,7 +19,7 @@ export default function SpeechToText() {
 
   /* Check if the browser supports speech recognition */
   if (!SpeechRecognition.browserSupportsSpeechRecognition) {
-    return <span>Browser doesn't support speech recognition.</span>;
+    return <span>Browser does not support speech recognition.</span>;
   }
 
 
