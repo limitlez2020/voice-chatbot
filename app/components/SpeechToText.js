@@ -12,6 +12,9 @@ export default function SpeechToText() {
   const [supportsSpeechRecognition, setSupportsSpeechRecognition] = useState(true);
   /* Ref for transcript */
   const transcriptRef = useRef(null);
+  /* State for the AI's response */
+  const [aiResponse, setAIResponse] = useState('');
+  const [loading, setLoading] = useState(false);
 
   
   /* Get the necessary properties from the useSpeechRecognition hook */
@@ -36,6 +39,8 @@ export default function SpeechToText() {
   /* Function to stop recording: */ 
   const stopRecording = () => {
     SpeechRecognition.stopListening();
+    /* Send the user's message to the AI and get response: */
+    getAIResponse(transcript);
   };
 
 
@@ -45,6 +50,46 @@ export default function SpeechToText() {
       transcriptRef.current.scrollTop = transcriptRef.current.scrollHeight;
     }
   }, [transcript]);
+
+
+  /* Function to send the user's message to the AI and get Response: */
+  const getAIResponse = async (userInput) => {
+    setLoading(true);
+    try {
+      /* Send the user's message to the API: */
+      const response = await fetch('/api', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt: userInput }),
+      });
+
+      /* Check if the response is okay: */
+      if (!response.ok) {
+        throw new Error('Failed to fetch response');
+      }
+
+      /* Get the response from the API: */
+      const data = await response.json();
+      // setAIResponse(data.text);
+
+      // Debugging:
+      console.log("Data received from API:", data);
+      if (data.text) {
+        setAIResponse(data.text);
+      } else {  
+        setAIResponse("Sorry, I am having trouble responding right now.");  
+      }
+    } 
+    catch (error) {
+      console.error("Error fetching AI response:", error);
+      setAIResponse("Sorry, I am having trouble responding right now.")
+    }
+    finally {
+      setLoading(false);
+    }
+  };
 
 
   
@@ -67,10 +112,19 @@ export default function SpeechToText() {
           </div>
 
           {/* Transcript: */}
-          <div className='w-1/2 h-14 text-lg text-gray-700 z-10 overflow-y-auto scrollbar-none'
+          <div className='w-1/2 h-14 text-lg text-center text-gray-700 z-10 overflow-y-auto scrollbar-none'
                 ref={transcriptRef}
           >
             {transcript}
+          </div>
+
+          {/* AI Response: */}
+          <div className='w-1/2 h-14 text-lg text-center text-gray-700 z-10 overflow-y-auto scrollbar-none'>
+            {loading ? (
+              <p>Generating response...</p>
+            ) : (
+              <p>{aiResponse}</p>
+            )}
           </div>
 
           {/* Recording Buttons: */}
