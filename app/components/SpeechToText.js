@@ -112,9 +112,13 @@ export default function SpeechToText() {
             </div>
           ) : (
             /* AI Response: */
-            <div className='w-1/2 h-14 text-lg text-center text-green-500 z-10 overflow-y-auto scrollbar-none'>
+            <div className='w-1/2 h-14 text-lg text-center text-green-600 z-10 overflow-y-auto scrollbar-none'>
               {loading ? (
-                <p>Generating response...</p>
+                <div className='flex flex-row justify-center items-center gap-2'>
+                  <div className='w-2 h-2 bg-green-800 rounded-full animate-pulse'/>
+                  <div className='w-2 h-2 bg-green-800 rounded-full animate-pulse' style={{animationDelay: "0.5s"}}/>
+                  <div className='w-2 h-2 bg-green-800 rounded-full animate-pulse' style={{animationDelay: "1s"}}/>
+                </div>
               ) : (
                 <p>{aiResponse}</p>
               )}
