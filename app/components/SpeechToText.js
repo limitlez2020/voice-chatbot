@@ -72,15 +72,7 @@ export default function SpeechToText() {
 
       /* Get the response from the API: */
       const data = await response.json();
-      // setAIResponse(data.text);
-
-      // Debugging:
-      console.log("Data received from API:", data);
-      if (data.text) {
-        setAIResponse(data.text);
-      } else {  
-        setAIResponse("Sorry, I am having trouble responding right now.");  
-      }
+      setAIResponse(data.text);
     } 
     catch (error) {
       console.error("Error fetching AI response:", error);
