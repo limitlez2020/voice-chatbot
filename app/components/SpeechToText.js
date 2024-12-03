@@ -89,7 +89,7 @@ export default function SpeechToText() {
     
     <div>
       {supportsSpeechRecognition ? (
-        <div className='w-full min-h-screen bg-[#fcf5eb] flex flex-col items-center'>
+        <div className='w-full h-screen min-h-full relative bg-[#fcf5eb] flex flex-col items-center'>
           {/* Background Noise Texture: */}
           <div className='absolute w-full h-full opacity-5 bg-noise-pattern'></div>
 
