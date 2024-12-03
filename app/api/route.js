@@ -12,13 +12,10 @@ export async function POST(request) {
     const { prompt } = await request.json();
 
     /* Get response from Gemini API: */
-    const result = await model.generateContentStream(prompt);
+    const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    // Debug:
-    // console.error("Response from AI:", text);
     return NextResponse.json({ text });
-    // return new Response(text);
   } 
   catch (error) {
     console.error("Error in API Call:", error.message);
