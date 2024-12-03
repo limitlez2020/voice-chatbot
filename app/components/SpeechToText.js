@@ -103,21 +103,24 @@ export default function SpeechToText() {
             {/* Insert an animation here: */}
           </div>
 
-          {/* Transcript: */}
-          <div className='w-1/2 h-14 text-lg text-center text-gray-700 z-10 overflow-y-auto scrollbar-none'
-                ref={transcriptRef}
-          >
-            {transcript}
-          </div>
+          {/* Display transcript or AI response: */}
+          {listening ? (
+            /* Transcript: */
+            <div className='w-1/2 h-14 text-lg text-center text-gray-700 z-10 overflow-y-auto scrollbar-none'
+                  ref={transcriptRef}>
+              {transcript}
+            </div>
+          ) : (
+            /* AI Response: */
+            <div className='w-1/2 h-14 text-lg text-center text-green-500 z-10 overflow-y-auto scrollbar-none'>
+              {loading ? (
+                <p>Generating response...</p>
+              ) : (
+                <p>{aiResponse}</p>
+              )}
+            </div>
+          )}
 
-          {/* AI Response: */}
-          <div className='w-1/2 h-14 text-lg text-center text-gray-700 z-10 overflow-y-auto scrollbar-none'>
-            {loading ? (
-              <p>Generating response...</p>
-            ) : (
-              <p>{aiResponse}</p>
-            )}
-          </div>
 
           {/* Recording Buttons: */}
           <button className={`${listening? 'bg-red-500' : 'bg-white'} p-4 border-black border-2 rounded-full z-10 mt-5`}
