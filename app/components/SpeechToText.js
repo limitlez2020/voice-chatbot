@@ -52,6 +52,16 @@ export default function SpeechToText() {
   }, [transcript]);
 
 
+  /* Function for the AI to speak to the user: */
+  const speak = (text) => {
+    let utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    window.speechSynthesis.speak(utterance);
+  };
+
+
   /* Function to send the user's message to the AI and get Response: */
   const getAIResponse = async (userInput) => {
     setLoading(true);
@@ -70,9 +80,10 @@ export default function SpeechToText() {
         throw new Error('Failed to fetch response');
       }
 
-      /* Get the response from the API: */
+      /* Get the response from the API and speak: */
       const data = await response.json();
       setAIResponse(data.text);
+      speak(data.text);
     } 
     catch (error) {
       console.error("Error fetching AI response:", error);
