@@ -56,8 +56,8 @@ export default function SpeechToText() {
   const speak = (text) => {
     let utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-US';
-    utterance.rate = 1;
-    utterance.pitch = 1;
+    utterance.rate = 1.2;
+    utterance.pitch = 2;
     window.speechSynthesis.speak(utterance);
   };
 
@@ -111,7 +111,8 @@ export default function SpeechToText() {
 
           {/* AI Voice Character: */}
           <div className='border-black border-2 size-56 rounded-full mb-28'>
-            {/* Insert an animation here: */}
+            {/* Insert an gradient here: */}
+            <div className='h-full w-full bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full animate-spin'/>
           </div>
 
           {/* Display transcript or AI response: */}
