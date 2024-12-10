@@ -12,7 +12,7 @@ export default function SpeechToText() {
   const [supportsSpeechRecognition, setSupportsSpeechRecognition] = useState(true);
   /* Ref for transcript and AI Response: */
   const transcriptRef = useRef(null);
-  // const aiResponseRef = useRef(null);
+  const aiResponseRef = useRef(null);
   /* State for the AI's response */
   const [aiResponse, setAIResponse] = useState('');
   const [loading, setLoading] = useState(false);
@@ -53,11 +53,11 @@ export default function SpeechToText() {
   }, [transcript]);
 
   /* Automatic scrolling to the bottom of the aiResponse: */
-  // useEffect(() => {
-  //   if (aiResponseRef.current) {
-  //     aiResponseRef.current.scrollTop = aiResponseRef.current.scrollHeight;
-  //   }
-  // }, [aiResponse]);
+  useEffect(() => {
+    if (aiResponseRef.current) {
+      aiResponseRef.current.scrollTop = aiResponseRef.current.scrollHeight;
+    }
+  }, [aiResponse]);
 
 
 
@@ -167,7 +167,8 @@ export default function SpeechToText() {
             </div>
           ) : (
             /* AI Response: */
-            <div className='w-1/2 h-14 text-lg text-center text-green-600 z-10 overflow-y-auto scrollbar-none'>
+            <div className='w-1/2 h-14 text-lg text-center text-green-600 z-10 overflow-y-auto scrollbar-none'
+                 ref={aiResponseRef}>
               {loading ? (
                 <div className='flex flex-row justify-center items-center gap-2'>
                   <div className='w-2 h-2 bg-green-800 rounded-full animate-pulse'/>
@@ -175,10 +176,7 @@ export default function SpeechToText() {
                   <div className='w-2 h-2 bg-green-800 rounded-full animate-pulse' style={{animationDelay: "1s"}}/>
                 </div>
               ) : (
-                // <div ref={aiResponseRef}>
-                <div>
-                  {aiResponse}
-                </div>
+                <p>{aiResponse}</p>
               )}
             </div>
           )}
