@@ -10,8 +10,9 @@ import { MicrophoneIcon } from '@heroicons/react/24/outline';
 export default function SpeechToText() {
   /* State to know whether the browser supports speech recognition */
   const [supportsSpeechRecognition, setSupportsSpeechRecognition] = useState(true);
-  /* Ref for transcript */
+  /* Ref for transcript and AI Response: */
   const transcriptRef = useRef(null);
+  // const aiResponseRef = useRef(null);
   /* State for the AI's response */
   const [aiResponse, setAIResponse] = useState('');
   const [loading, setLoading] = useState(false);
@@ -51,6 +52,14 @@ export default function SpeechToText() {
     }
   }, [transcript]);
 
+  /* Automatic scrolling to the bottom of the aiResponse: */
+  // useEffect(() => {
+  //   if (aiResponseRef.current) {
+  //     aiResponseRef.current.scrollTop = aiResponseRef.current.scrollHeight;
+  //   }
+  // }, [aiResponse]);
+
+
 
   /* Function for the AI to speak to the user: */
   const speak = (text) => {
@@ -59,6 +68,38 @@ export default function SpeechToText() {
     utterance.rate = 1.2;
     utterance.pitch = 2;
     window.speechSynthesis.speak(utterance);
+  };
+
+
+  /* Function to simulate typing effect for the AI response: */
+  const simulateTyping = (text) => {
+    /* Make sure text is valid: */
+    if (!text || typeof text !== "string") {
+      return;
+    }
+
+    /* Initiaize the response with the first char: */
+    setAIResponse('');
+
+    /* Index for accessing chars:
+     * NOTE: Start at -1 so that the first char is at index 0
+     * We do this because we increment the index before accessing the char 
+     * because the setAIResponse function is asynchronous so by time it is
+     * called the first time, the index would have already been increased */
+    let index = -1;
+    
+    /* Use the setInterval method -- it performs the code, with a delay
+    * Here, we'll add a char from the text to the AI Response state every 50ms */
+    let delay = 50;
+    const interval = setInterval(() => {
+      if (index < text.length - 1) {
+        setAIResponse((prev) => prev + text[index]);
+        index++;
+      }
+      else {
+        clearInterval(interval); /* Stop the interval */
+      }
+    }, delay); /* Typing speed */
   };
 
 
@@ -80,9 +121,11 @@ export default function SpeechToText() {
         throw new Error('Failed to fetch response');
       }
 
-      /* Get the response from the API and speak: */
+      /* Get the response from the AI API: */
       const data = await response.json();
-      setAIResponse(data.text);
+
+      /* Type and speak the response from the AI */
+      simulateTyping(data.text);
       speak(data.text);
     } 
     catch (error) {
@@ -132,7 +175,10 @@ export default function SpeechToText() {
                   <div className='w-2 h-2 bg-green-800 rounded-full animate-pulse' style={{animationDelay: "1s"}}/>
                 </div>
               ) : (
-                <p>{aiResponse}</p>
+                // <div ref={aiResponseRef}>
+                <div>
+                  {aiResponse}
+                </div>
               )}
             </div>
           )}
