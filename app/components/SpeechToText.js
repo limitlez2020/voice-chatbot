@@ -16,6 +16,7 @@ export default function SpeechToText() {
   /* State for the AI's response */
   const [aiResponse, setAIResponse] = useState('');
   const [loading, setLoading] = useState(false);
+  const [aiSpeaking, setAISpeaking] = useState(false);
 
   
   /* Get the necessary properties from the useSpeechRecognition hook */
@@ -35,6 +36,9 @@ export default function SpeechToText() {
   const startRecording = () => {
     SpeechRecognition.startListening({ continuous: true });
     resetTranscript();
+
+    /* Set the speaking state of AI to false: */
+    setAISpeaking(false);
   };
 
   /* Function to stop recording: */ 
@@ -42,6 +46,9 @@ export default function SpeechToText() {
     SpeechRecognition.stopListening();
     /* Send the user's message to the AI and get response: */
     getAIResponse(transcript);
+
+    /* Set the speaking state of AI to true: */
+    setAISpeaking(true);
   };
 
 
@@ -63,6 +70,7 @@ export default function SpeechToText() {
 
   /* Function for the AI to speak to the user: */
   const speak = (text) => {
+    setAISpeaking(true);
     let utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-US';
     utterance.rate = 1.2;
@@ -154,8 +162,16 @@ export default function SpeechToText() {
 
           {/* AI Voice Character: */}
           <div className='border-black border-2 size-56 rounded-full mb-28'>
-            {/* Insert an gradient here: */}
-            <div className='h-full w-full bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full animate-spin'/>
+            {aiSpeaking ? (
+              /* Insert an animation here: */
+              <div className='relative h-full w-full'>
+                <div className='absolute h-full w-full bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full animate-spin'/>
+                <div className="absolute h-full w-full bg-gradient-to-t opacity-70 from-[#2f4858] to-blue-100 rounded-full animate-pulse" style={{ animationDelay: "0.30s"}}/>
+              </div>
+            ) : (
+              /* No animation: */
+              <div className='h-full w-full bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full animate-spin'/>
+            )}
           </div>
 
           {/* Display transcript or AI response: */}
