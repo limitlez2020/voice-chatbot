@@ -161,16 +161,22 @@ export default function SpeechToText() {
           </div>
 
           {/* AI Voice Character: */}
-          <div className='border-black border-2 size-56 rounded-full mb-28'>
+          <div className='size-56 mb-28'>
             {aiSpeaking ? (
-              /* Insert an animation here: */
-              <div className='relative h-full w-full'>
-                <div className='absolute h-full w-full bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full animate-spin'/>
-                <div className="absolute h-full w-full bg-gradient-to-t opacity-70 from-[#2f4858] to-blue-100 rounded-full animate-pulse" style={{ animationDelay: "0.30s"}}/>
+              /* Animation for AI speaking -- wave: */
+              <div className='flex flex-row items-center justify-center gap-2 h-4/5 w-full'>
+                <div className='w-1/6 bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full
+                                border-black border-2 animate-speaking-wave' style={{ animationDelay: '0.2s'}}/>
+                <div className='w-1/6 bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full
+                                border-black border-2 animate-speaking-wave' style={{ animationDelay: '0.4s'}}/>
+                <div className='w-1/6 bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full
+                                border-black border-2 animate-speaking-wave' style={{ animationDelay: '0.6s'}}/>
+                <div className='w-1/6 bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full
+                                border-black border-2 animate-speaking-wave' style={{ animationDelay: '0.8s'}}/>
               </div>
             ) : (
               /* No animation: */
-              <div className='h-full w-full bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full animate-spin'/>
+              <div className='h-full w-full border-black border-[2px] bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full animate-listening'/>
             )}
           </div>
 
