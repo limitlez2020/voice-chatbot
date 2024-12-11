@@ -75,7 +75,20 @@ export default function SpeechToText() {
     utterance.lang = 'en-US';
     utterance.rate = 1.2;
     utterance.pitch = 2;
+
+    /* When AI is speaking, set to true: */
+    utterance.onstart = () => {
+      setAISpeaking(true);
+    };
+
+    /* Speak the text: */
     window.speechSynthesis.speak(utterance);
+
+    /* When AI is done speaking, set to false: */
+    utterance.onend = () => {
+      setAISpeaking(false);
+    };
+
   };
 
 
@@ -100,9 +113,11 @@ export default function SpeechToText() {
     * Here, we'll add a char from the text to the AI Response state every 50ms */
     let delay = 50;
     const interval = setInterval(() => {
-      if (index < text.length - 1) {
+      /* Increment the index at the start of each interval: */
+      index++;
+      
+      if (index < text.length) {
         setAIResponse((prev) => prev + text[index]);
-        index++;
       }
       else {
         clearInterval(interval); /* Stop the interval */
