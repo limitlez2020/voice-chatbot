@@ -111,11 +111,11 @@ export default function SpeechToText() {
     
     /* Use the setInterval method -- it performs the code, with a delay
     * Here, we'll add a char from the text to the AI Response state every 50ms */
-    let delay = 50;
+    let delay = 61;
     const interval = setInterval(() => {
       /* Increment the index at the start of each interval: */
       index++;
-      
+
       if (index < text.length) {
         setAIResponse((prev) => prev + text[index]);
       }
@@ -180,13 +180,13 @@ export default function SpeechToText() {
             {aiSpeaking ? (
               /* Animation for AI speaking -- wave: */
               <div className='flex flex-row items-center justify-center gap-2 h-4/5 w-full'>
-                <div className='w-1/6 bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full
+                <div className='w-1/6 bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full h-1/2
                                 border-black border-2 animate-speaking-wave' style={{ animationDelay: '0.2s'}}/>
-                <div className='w-1/6 bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full
+                <div className='w-1/6 bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full h-1/4
                                 border-black border-2 animate-speaking-wave' style={{ animationDelay: '0.4s'}}/>
-                <div className='w-1/6 bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full
+                <div className='w-1/6 bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full h-1/3
                                 border-black border-2 animate-speaking-wave' style={{ animationDelay: '0.6s'}}/>
-                <div className='w-1/6 bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full
+                <div className='w-1/6 bg-gradient-to-r from-[#24D368] to-[#79E8B3] rounded-full h-1/2
                                 border-black border-2 animate-speaking-wave' style={{ animationDelay: '0.8s'}}/>
               </div>
             ) : (
