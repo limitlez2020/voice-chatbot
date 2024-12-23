@@ -121,7 +121,7 @@ export default function SpeechToText() {
     
     /* Use the setInterval method -- it performs the code, with a delay
     * Here, we'll add a char from the text to the AI Response state every 50ms */
-    let delay = 61;
+    let delay = 55;
     const interval = setInterval(() => {
       /* Increment the index at the start of each interval: */
       index++;
