@@ -39,7 +39,7 @@ export default function SpeechToText() {
 
     /* Set the speaking state of AI to false: */
     setAISpeaking(false);
-    // Cancel the AI speaking
+    /* When user interrupts, stop AI from speaking: */
     window.speechSynthesis.cancel();
   };
 
@@ -75,8 +75,16 @@ export default function SpeechToText() {
     setAISpeaking(true);
     let utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-US';
-    utterance.rate = 1.2;
-    utterance.pitch = 2;
+    utterance.rate = 1;
+    utterance.pitch = 1;
+
+    /* Get the different voices available: */
+    let voices = window.speechSynthesis.getVoices();
+    /* Use the english uk voice -- sounds more human-like */
+    let voice = voices.find((voice) => voice.lang === 'en-GB');
+    if (voice) {
+      utterance.voice = voice;
+    }
 
     /* When AI is speaking, set to true: */
     utterance.onstart = () => {
