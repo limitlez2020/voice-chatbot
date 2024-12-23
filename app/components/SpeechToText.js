@@ -17,6 +17,7 @@ export default function SpeechToText() {
   const [aiResponse, setAIResponse] = useState('');
   const [loading, setLoading] = useState(false);
   const [aiSpeaking, setAISpeaking] = useState(false);
+  const [voice, setVoice] = useState(null);
 
   
   /* Get the necessary properties from the useSpeechRecognition hook */
@@ -68,11 +69,34 @@ export default function SpeechToText() {
     }
   }, [aiResponse]);
 
+  // /* When the component mounts, get the voices available: */
+  // // on voicechanged event, set the voice to the english uk voice
+  
+  // useEffect(() => {
+  //   window.speechSynthesis.onvoiceschanged = () => {
+  //     const voices = window.speechSynthesis.getVoices();
+  //     const voice = voices.find((voice) => voice.lang === 'en-GB');
+  //     setVoice(voice);
+  //   };
+  //   window.speechSynthesis.onvoiceschanged();
+  // }, []);
+
 
 
   /* Function for the AI to speak to the user: */
   const speak = (text) => {
     setAISpeaking(true);
+
+    /* Split long text into smaller chunks: every 200 characters*/
+    // const chunks = text.match(/.{1,200}(\s|$)|\S+/g);
+
+    // /* Speak each chunk sequentially: */
+    // const speakChunk = async () => {
+    //   for (const chunk of chunks) {
+    //     await speakText(chunk);
+    //   }
+    // }
+
     let utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-US';
     utterance.rate = 1;
@@ -81,7 +105,12 @@ export default function SpeechToText() {
     /* Get the different voices available: */
     let voices = window.speechSynthesis.getVoices();
     /* Use the english uk voice -- sounds more human-like */
-    let voice = voices.find((voice) => voice.lang === 'en-GB');
+    let voice = voices.find((voice) => voice.lang === 'en-GB'); /* Default */
+    if (voice) {
+      utterance.voice = voice;
+    }
+
+    /* Use the voice set in the state: */
     if (voice) {
       utterance.voice = voice;
     }
@@ -182,7 +211,7 @@ export default function SpeechToText() {
 
           {/* Header: */}
           <div className='font-semibold text-xl pt-7 mb-28'>
-            Voice Chatbot
+            Voice Therapy
           </div>
 
           {/* AI Voice Character: */}
