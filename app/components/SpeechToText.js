@@ -39,6 +39,8 @@ export default function SpeechToText() {
 
     /* Set the speaking state of AI to false: */
     setAISpeaking(false);
+    // Cancel the AI speaking
+    window.speechSynthesis.cancel();
   };
 
   /* Function to stop recording: */ 
