@@ -88,45 +88,56 @@ export default function SpeechToText() {
     setAISpeaking(true);
 
     /* Split long text into smaller chunks: every 200 characters*/
-    // const chunks = text.match(/.{1,200}(\s|$)|\S+/g);
+    const chunks = text.split(/(?<=[.!?])\s+/);
+    
+    /* Helper function to speak a chunk of text: */
+    const speakChunk = (chunk, index) => {
+      let utterance = new SpeechSynthesisUtterance(chunk);
+      utterance.lang = 'en-US';
+      utterance.rate = 1;
+      utterance.pitch = 1;
+      
+      /* Get the different voices available: */
+      let voices = window.speechSynthesis.getVoices();
+      /* Use the english uk voice -- sounds more human-like */
+      let voice = voices.find((voice) => voice.lang === 'en-GB'); /* Default */
 
-    // /* Speak each chunk sequentially: */
-    // const speakChunk = async () => {
-    //   for (const chunk of chunks) {
-    //     await speakText(chunk);
-    //   }
-    // }
 
-    let utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
-    utterance.rate = 1;
-    utterance.pitch = 1;
-
-    /* Get the different voices available: */
-    let voices = window.speechSynthesis.getVoices();
-    /* Use the english uk voice -- sounds more human-like */
-    let voice = voices.find((voice) => voice.lang === 'en-GB'); /* Default */
-    if (voice) {
-      utterance.voice = voice;
-    }
-
-    /* Use the voice set in the state: */
-    if (voice) {
-      utterance.voice = voice;
-    }
-
-    /* When AI is speaking, set to true: */
-    utterance.onstart = () => {
-      setAISpeaking(true);
+      /* Use the voice set in the state: */
+      if (voice) {
+        utterance.voice = voice;
+      }
+      
+      /* When AI is speaking, set to true: */
+      utterance.onstart = () => {
+        if (index === 0) {
+          setAISpeaking(true);
+        }
+        // setAISpeaking(true);
+      };
+      
+      /* When AI is done speaking, set to false: */
+      /* Finish speaking when all the chunks are done: */
+      utterance.onend = () => {
+        if (index === chunks.length - 1) {
+          setAISpeaking(false);
+        }
+        // setAISpeaking(false);
+      };
+      
+      /* Speak the text: */
+      window.speechSynthesis.speak(utterance);
     };
+    
 
-    /* Speak the text: */
-    window.speechSynthesis.speak(utterance);
-
-    /* When AI is done speaking, set to false: */
-    utterance.onend = () => {
-      setAISpeaking(false);
-    };
+    /* Speak each chunk sequentially: */
+    chunks.forEach((chunk, index) => {
+      /* Delay each chunk to allow the previous one to finish: */
+      setTimeout(() => {
+        speakChunk(chunk, index);
+      }, 500); /* 0.5 second delay */
+      
+    });
 
   };
 
@@ -150,7 +161,7 @@ export default function SpeechToText() {
     
     /* Use the setInterval method -- it performs the code, with a delay
     * Here, we'll add a char from the text to the AI Response state every 50ms */
-    let delay = 55;
+    let delay = 65;
     const interval = setInterval(() => {
       /* Increment the index at the start of each interval: */
       index++;
